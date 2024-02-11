@@ -1,4 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:klikticket/models/combined_model.dart';
 import 'package:klikticket/providers/expenses_provider.dart';
 import 'package:klikticket/utils/constants.dart';
@@ -51,8 +53,17 @@ class FrontSheet extends StatelessWidget {
                         const FlayerSkin(
                             myTitle: 'Información', myWidget: _InfoWidget()),
                         FlayerSkin(
-                            myTitle: 'Liquidaciones', myWidget: Container()),
-                        FlayerSkin(myTitle: 'Viajes', myWidget: Container()),
+                          myTitle: 'Liquidaciones',
+                          myWidget: _LiquidacionesWidget(
+                            imgList: [
+                              Container(),
+                              Container(),
+                              Container(),
+                            ],
+                          ),
+                        ),
+                        const FlayerSkin(
+                            myTitle: 'Viajes', myWidget: _ViajesWidget()),
                         FlayerSkin(
                             myTitle: 'Estadísticas',
                             myWidget: SizedBox(
@@ -61,10 +72,7 @@ class FrontSheet extends StatelessWidget {
                                 physics: const BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 children: const [
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 20),
-                                    child: FlayerCategories(),
-                                  ),
+                                  FlayerCategories(),
                                   FlayerFrecuency(),
                                 ],
                               ),
@@ -93,6 +101,94 @@ class FrontSheet extends StatelessWidget {
   }
 }
 
+class _ViajesWidget extends StatelessWidget {
+  const _ViajesWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 200,
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey)]),
+    );
+  }
+}
+
+class _LiquidacionesWidget extends StatefulWidget {
+  final List<Widget> imgList;
+  const _LiquidacionesWidget({
+    super.key,
+    required this.imgList,
+  });
+
+  @override
+  State<_LiquidacionesWidget> createState() => _LiquidacionesWidgetState();
+}
+
+class _LiquidacionesWidgetState extends State<_LiquidacionesWidget> {
+  int _current = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> imageSliders = widget.imgList
+        .map((item) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white70,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 5,
+                        color: Colors.grey,
+                      )
+                    ]),
+              ),
+            ))
+        .toList();
+
+    return Column(
+      children: [
+        CarouselSlider(
+          items: imageSliders,
+          options: CarouselOptions(
+              enableInfiniteScroll: false,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _current = index;
+                });
+              }),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: widget.imgList.map((url) {
+            int index = widget.imgList.indexOf(url);
+            return Container(
+              width: 8,
+              height: 8,
+              margin: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 3,
+              ),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _current == index
+                    ? Color.fromRGBO(0, 0, 0, 0.9)
+                    : Color.fromRGBO(0, 0, 0, 0.4),
+              ),
+            );
+          }).toList(),
+        )
+      ],
+    );
+  }
+}
+
 //ULTIMO GASTO
 class _UltimoGastoWidget extends StatefulWidget {
   const _UltimoGastoWidget({super.key});
@@ -106,6 +202,7 @@ class _UltimoGastoWidgetState extends State<_UltimoGastoWidget> {
   @override
   Widget build(BuildContext context) {
     cList = context.watch<ExpensesProvider>().allItemsList;
+    final size = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -115,10 +212,72 @@ class _UltimoGastoWidgetState extends State<_UltimoGastoWidget> {
           boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey)]),
       child: (cList.isEmpty)
           ? const Text('')
-          : Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                  'Ultimo gasto: ${cList[0].category} ${cList[0].day}/${cList[0].month}/${cList[0].year} ${getAmountFormat(cList[0].amount)}'),
+          : GestureDetector(
+              onTap: () => Navigator.pushNamed(context, 'add_expenses',
+                  arguments: cList[0]),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                    'Ultimo gasto: ${cList[0].category} ${cList[0].day}/${cList[0].month}/${cList[0].year} ${getAmountFormat(cList[0].amount)}'),
+              ),
+              onLongPress: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  backgroundColor: Colors.transparent,
+                  contentPadding: EdgeInsets.zero,
+                  content: //IMAGEN RENDERIZADA DE FONDO
+                      Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10))),
+                    height: size.height * 0.7,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.6,
+                          width: double.infinity,
+                          child: InteractiveViewer(
+                            child: Image.asset(
+                              'assets/ticket.jpg',
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                cList[0].category,
+                                style: GoogleFonts.roboto(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                getAmountFormat(cList[0].amount),
+                                style: GoogleFonts.roboto(
+                                    fontSize: size.height * 0.025,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '${cList[0].day}/${cList[0].month}/${cList[0].year}',
+                                style: GoogleFonts.roboto(
+                                    fontSize: size.height * 0.025,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
     );
   }

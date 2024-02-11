@@ -31,7 +31,7 @@ class SaveButton extends StatelessWidget {
           
           Fluttertoast.showToast(
             msg: (hasData) ? 'Gasto editado':'Gasto agregado 👍',
-            backgroundColor: Colors.green
+            backgroundColor: const Color.fromARGB(255, 24, 24, 241)
           );
           uiProvider.bnbIndex = 0;
           Navigator.pop(context);

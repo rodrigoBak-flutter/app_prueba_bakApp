@@ -54,8 +54,7 @@ class _BSCategoryState extends State<BSCategory> {
         padding: const EdgeInsets.all(18.0),
         child: Row(
           children: [
-            const Icon(Icons.category_outlined, size: 35.0),
-            const SizedBox(width: 12.0),
+            
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(20.0),

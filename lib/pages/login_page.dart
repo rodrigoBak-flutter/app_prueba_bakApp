@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:local_auth/local_auth.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:klikticket/pages/home_page.dart';
@@ -553,6 +554,7 @@ class LoginFormState extends State<LoginForm> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
 
+  late final LocalAuthentication auth;
   //LOGICA PARA MOSTRAR O OCULTAR CONTRASEÑA
   bool _passwordVisible = true;
 
@@ -696,6 +698,52 @@ class LoginFormState extends State<LoginForm> {
                       ModalRoute.withName(''));
                 }),
           ),
+          const SizedBox(height: 30),
+          //INGRESAR CON HUELLA
+          GestureDetector(
+            onTap: () async {
+              try {
+                bool authenticated = await auth.authenticate(
+                    localizedReason: 'Introduce tu huella para iniciar sesion',
+                    options: const AuthenticationOptions(
+                        stickyAuth: true,
+                        biometricOnly: false,
+                        useErrorDialogs: false,
+                        sensitiveTransaction: true),
+                    authMessages: []);
+                //SI EL USUARIO SE AUTENTICA MEDIANDO FACEID LO DEVUELVO A LA PANTALLA HOME
+                if (authenticated == true) {
+                  //  print('INICIAR CON HUELLA');
+                  // ignore: use_build_context_synchronously
+                  FocusScope.of(context).unfocus();
+                  //MOSTRAR UN LOADING
+                  // ignore: use_build_context_synchronously
+                  ProgressDialog.show(context);
+
+                  await Future.delayed(
+                    const Duration(seconds: 3),
+                  );
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      PageAnimationRoutes(widget: HomePage()),
+                      ModalRoute.withName(''));
+                }
+                print('AUTENTICADO: $authenticated');
+
+                //TODO: SI EL USAURIO NO SE AUTENTICA MEDIANTE ESTE FACTOR, POR FALLO MANEJAR EL FALLO MEDIANTE PIN
+              } on PlatformException catch (e) {
+                //PARA MOSTRAR EL ERROR EN CONSOLA
+                print('NO SOPORTA TOUCHID: $e');
+              }
+            },
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.fingerprint),
+                Text('Iniciar sesion con huella')
+              ],
+            ),
+          )
         ],
       ),
     );

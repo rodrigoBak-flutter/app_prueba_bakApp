@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EL COLOR DE MI SPLASH O PANTALLA DE INICIO -->
+    <color name="primary">#1818f1</color>
+</resources>

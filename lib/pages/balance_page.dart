@@ -1,6 +1,8 @@
 import 'package:klikticket/widgets/balance_page_wt/custom_fab.dart';
 import 'package:klikticket/widgets/balance_page_wt/front_sheet.dart';
-
+import 'package:quick_actions/quick_actions.dart';
+import 'package:klikticket/utils/page_animation_routes.dart';
+import 'package:klikticket/pages/add_expenses.dart';
 import 'package:flutter/material.dart';
 
 class BalancePage extends StatefulWidget {
@@ -11,6 +13,7 @@ class BalancePage extends StatefulWidget {
 }
 
 class _BalancePageState extends State<BalancePage> {
+  String shortcut = 'Ninguna acción establecida';
   final _scrollController = ScrollController();
   double _offset = 0;
 
@@ -24,6 +27,33 @@ class _BalancePageState extends State<BalancePage> {
   @override
   void initState() {
     _scrollController.addListener(_listener);
+
+    //INGRESO DIRECTO MANTENIENDO EL CLICK EN EL ICONO(POR FUERA DE LA APLICACION)
+    const QuickActions quickActions = QuickActions();
+    quickActions.initialize((String shortcutType) {
+      shortcut = shortcutType;
+      if (shortcutType == "nuevo-ticket") {
+        Navigator.pushAndRemoveUntil(
+                      context,
+                      PageAnimationRoutes(
+                        widget: const AddExpenses(),
+                      ),
+                      ModalRoute.withName(''));
+      }
+    });
+
+    quickActions.setShortcutItems(<ShortcutItem>[
+      const ShortcutItem(
+          type: 'nuevo-ticket',
+          localizedTitle: 'Nuevo Ticket',
+          icon: 'ic_launcher'),
+    ]).then((void _) {
+      setState(() {
+        if (shortcut == 'ninguna acción establecida') {
+          shortcut = 'acciones listas';
+        }
+      });
+    });
 
     super.initState();
   }

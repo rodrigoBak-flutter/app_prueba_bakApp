@@ -21,7 +21,7 @@ class CustomFAB extends StatelessWidget {
         width: 150,
         height: 40,
         decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 1, 63, 114),
+            color: Color.fromARGB(255, 55, 73, 87),
             borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

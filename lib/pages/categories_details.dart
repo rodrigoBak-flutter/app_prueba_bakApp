@@ -23,21 +23,18 @@ class _CategoriesDetailsState extends State<CategoriesDetails> {
     var etList = context.watch<ExpensesProvider>().etList;
     final cModel = ModalRoute.of(context)!.settings.arguments as CombinedModel?;
 
-    var totalEt = getAmountFormat(
-      getSumOfEntrie(etList)
-    );
+    var totalEt = getAmountFormat(getSumOfEntrie(etList));
 
-    var totalEx = getAmountFormat(
-      getSumOfExP(eList)
-    );
+    var totalEx = getAmountFormat(getSumOfExP(eList));
 
     cList = cList.where((e) => e.category == cModel!.category).toList();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorDark,
+  
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            backgroundColor: const Color.fromARGB(255, 24, 24, 241),
             expandedHeight: 200.0,
             title: Text(cModel!.category),
             actions: [
@@ -46,9 +43,7 @@ class _CategoriesDetailsState extends State<CategoriesDetails> {
                   padding: const EdgeInsets.only(right: 20.0),
                   child: Text(
                     getAmountFormat(cModel.amount),
-                    style: const TextStyle(
-                      fontSize: 18.0
-                    ),
+                    style: const TextStyle(fontSize: 18.0),
                   ),
                 ),
               )
@@ -57,87 +52,65 @@ class _CategoriesDetailsState extends State<CategoriesDetails> {
               background: Align(
                 alignment: Alignment.bottomCenter,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Stack(
-                      alignment: Alignment.bottomCenter,
-                      children:[
-                        PercentCircular(
-                          percent: cModel.amount / getSumOfEntrie(etList), 
-                          radius: 70, 
-                          color: Colors.blue,
-                          arcType: ArcType.HALF,
-                        ),
-                        Text(
-                          'Absorbe de tus\nIngresos: $totalEt',
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 10),
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          PercentCircular(
+                            percent: cModel.amount / getSumOfExP(eList),
+                            radius: 70,
+                            color: Colors.blue,
+                            arcType: ArcType.HALF,
+                          ),
+                          Text(
+                            'Absorbe de tus\nIngresos: $totalEx',
+                            textAlign: TextAlign.center,
+                             style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        PercentCircular(
-                          percent: cModel.amount / getSumOfExP(eList), 
-                          radius: 70, 
-                          color: Colors.red,
-                          arcType: ArcType.HALF,
-                        ),
-                        Text(
-                          'Representa de tus\n Gastos: $totalEx',
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                    
                   ],
                 ),
               ),
             ),
           ),
-
           SliverToBoxAdapter(
             child: Container(
               padding: const EdgeInsets.only(top: 10.0),
               height: 40.0,
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: Container(
-                decoration: Constants.sheetBoxDecoration(
-                  Theme.of(context).primaryColorDark
-                ),
-              ),
+              
             ),
           ),
-
-          SliverList(delegate: SliverChildBuilderDelegate(
-            (context, i){
-              var item = cList[i];
-              return ListTile(
-                leading: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    const Icon(Icons.calendar_today, size: 40.0),
-                    Positioned(
-                      top: 16,
-                      child: Text(item.day.toString())
-                    )
-                  ],
-                ),
-                title: PercentLinear(
-                  percent: item.amount / cModel.amount,
-                  color: item.color.toColor(),
-                ),
-                trailing: Text(
-                  getAmountFormat(item.amount),
-                  style: const TextStyle(
+          SliverList(
+            
+              delegate: SliverChildBuilderDelegate((context, i) {
+            var item = cList[i];
+            return ListTile(
+              leading: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  const Icon(Icons.calendar_today, size: 40.0),
+                  Positioned(top: 16, child: Text(item.day.toString()))
+                ],
+              ),
+              title: PercentLinear(
+                percent: item.amount / cModel.amount,
+                color: item.color.toColor(),
+              ),
+              trailing: Text(
+                getAmountFormat(item.amount),
+                style: const TextStyle(
                     // fontSize: 18.0,
                     letterSpacing: 1.2,
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-              );
-            },
-            childCount: cList.length
-          ))
+                    fontWeight: FontWeight.bold),
+              ),
+            );
+          }, childCount: cList.length))
         ],
       ),
     );

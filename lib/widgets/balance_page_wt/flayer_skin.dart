@@ -15,7 +15,6 @@ class FlayerSkin extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            
             padding: const EdgeInsets.only(left: 14.0, bottom: 6.0),
             width: size.width,
             child: Text(
@@ -27,9 +26,8 @@ class FlayerSkin extends StatelessWidget {
           ),
           Container(
             width: size.width,
-            padding: const EdgeInsets.all(16.0),
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(30.0)),
+            padding: const EdgeInsets.only(bottom: 15),
+            
             child: myWidget,
           )
         ],

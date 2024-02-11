@@ -41,7 +41,7 @@ class _BSNumKeyboardState extends State<BSNumKeyboard> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(
-                '\$ ${import.replaceAllMapped(reg, mathFunc)}',
+                '${import.replaceAllMapped(reg, mathFunc)}\€',
                 style: const TextStyle(
                     fontSize: 30.0,
                     letterSpacing: 2.0,
@@ -170,7 +170,9 @@ class _BSNumKeyboardState extends State<BSNumKeyboard> {
                           Expanded(
                             child: GestureDetector(
                               child: Constants.customButton(
-                                  Colors.transparent, const Color.fromARGB(255, 24, 24, 241), 'ACEPTAR'),
+                                  Colors.transparent,
+                                  const Color.fromARGB(255, 24, 24, 241),
+                                  'ACEPTAR'),
                               onTap: () {
                                 setState(() {
                                   if (import.length == 0.0) import = '0.00';

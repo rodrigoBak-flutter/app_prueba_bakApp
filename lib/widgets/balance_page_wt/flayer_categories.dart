@@ -39,8 +39,8 @@ class FlayerCategories extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(
-                flex: 1,
+              Container(
+                width: 150,
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -79,11 +79,11 @@ class FlayerCategories extends StatelessWidget {
                   },
                 ),
               ),
-              const Expanded(
-                  flex: 3,
-                  child: SizedBox(
+              Container(
+                  width: 200,
+                  child: Container(
                     height: 200.0,
-                    child: ChartPieFlayer(),
+                    child: const ChartPieFlayer(),
                   )),
             ],
           ),
@@ -92,12 +92,15 @@ class FlayerCategories extends StatelessWidget {
               uiProvider.bnbIndex = 1;
               uiProvider.selectedChart = 'Gráfico Pie';
             },
-            child: const Align(
-              alignment: Alignment.bottomRight,
-              widthFactor: 4.5,
-              child: Text(
-                'DETALLES',
-                style: TextStyle(fontSize: 10.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                widthFactor: 4.5,
+                child: Text(
+                  'DETALLES',
+                  style: TextStyle(fontSize: 10.0),
+                ),
               ),
             ),
           )

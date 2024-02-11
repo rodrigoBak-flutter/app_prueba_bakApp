@@ -76,7 +76,8 @@ class PercentCircular extends StatelessWidget {
       center: Text(
         '${(_percent * 100).toStringAsFixed(0)}%',
         style: const TextStyle(
-          fontSize: 25.0
+          fontSize: 25.0,
+          color: Colors.white
         ),
       ),
     );
