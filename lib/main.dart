@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'KLIKTICKET PRUEBA',
       // theme: value.getTheme(),
-      initialRoute: 'loading',
+      initialRoute: 'home',
       routes: appRoutes,
     );
   }

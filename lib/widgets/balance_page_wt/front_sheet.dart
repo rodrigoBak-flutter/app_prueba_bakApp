@@ -52,31 +52,33 @@ class FrontSheet extends StatelessWidget {
                             myTitle: 'KlikCard', myWidget: _KlikCardWidget()),
                         const FlayerSkin(
                             myTitle: 'Información', myWidget: _InfoWidget()),
-                        FlayerSkin(
+                        const FlayerSkin(
                           myTitle: 'Liquidaciones',
                           myWidget: _LiquidacionesWidget(
                             imgList: [
-                              Container(),
-                              Container(),
-                              Container(),
+                              SizedBox(),
+                              SizedBox(),
+                              SizedBox(),
                             ],
                           ),
                         ),
                         const FlayerSkin(
                             myTitle: 'Viajes', myWidget: _ViajesWidget()),
                         FlayerSkin(
-                            myTitle: 'Estadísticas',
-                            myWidget: SizedBox(
-                              height: 250,
-                              child: ListView(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                children: const [
-                                  FlayerCategories(),
-                                  FlayerFrecuency(),
-                                ],
-                              ),
-                            )),
+                          myTitle: 'Estadísticas',
+                          myWidget: SizedBox(
+                            height: 250,
+                            child: ListView(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              children: const [
+                                FlayerCategories(),
+                                FlayerFrecuency(),
+                              ],
+                            ),
+                          ),
+                        ),
+
                         const SizedBox(
                           height: 80,
                         )
@@ -108,13 +110,94 @@ class _ViajesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Container(
       width: double.infinity,
-      height: 200,
+      height: 250,
       decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey)]),
+          boxShadow: [
+            BoxShadow(blurRadius: 5, color: Colors.grey),
+          ]),
+      child: Column(children: [
+        //ESTADO DE LA LIQUIDACION
+        ListTile(
+          leading: const Icon(
+            Icons.receipt_outlined,
+            size: 20,
+          ),
+          title: Text(
+            'Abierta',
+            style: GoogleFonts.roboto(
+                fontSize: size.height * 0.03, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            'Diciembre',
+            style: GoogleFonts.roboto(
+                fontSize: size.height * 0.015, fontWeight: FontWeight.bold),
+          ),
+          trailing: Text(
+            '154,30€',
+            style: GoogleFonts.roboto(
+                fontSize: size.height * 0.02, fontWeight: FontWeight.bold),
+          ),
+        ),
+        //INICIO DE LA LIQUIDACION
+        ListTile(
+          leading: const Icon(
+            Icons.calendar_month_outlined,
+            size: 20,
+          ),
+          title: Text(
+            '01/12/2023',
+            style: GoogleFonts.roboto(
+              fontSize: size.height * 0.012,
+            ),
+          ),
+          trailing: Text(
+            'Inicio',
+            style: GoogleFonts.roboto(
+                fontSize: size.height * 0.02, fontWeight: FontWeight.bold),
+          ),
+        ),
+        //FIN DE LA LIQUIDACION
+        ListTile(
+          leading: const Icon(
+            Icons.calendar_month_outlined,
+            size: 20,
+          ),
+          title: Text(
+            '23/12/2023',
+            style: GoogleFonts.roboto(
+              fontSize: size.height * 0.012,
+            ),
+          ),
+          trailing: Text(
+            'Finalizo',
+            style: GoogleFonts.roboto(
+                fontSize: size.height * 0.02, fontWeight: FontWeight.bold),
+          ),
+        ),
+        //TOTAL DE GASTOS
+        ListTile(
+          leading: const Icon(
+            Icons.euro_outlined,
+            size: 20,
+          ),
+          title: Text(
+            'TOTAL DE GASTOS',
+            style: GoogleFonts.roboto(
+              fontSize: size.height * 0.02,
+            ),
+          ),
+          trailing: Text(
+            '5',
+            style: GoogleFonts.roboto(
+                fontSize: size.height * 0.02, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ]),
     );
   }
 }
@@ -135,12 +218,17 @@ class _LiquidacionesWidgetState extends State<_LiquidacionesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> imageSliders = widget.imgList
+    final size = MediaQuery.of(context).size;
+    final List<Widget> imageSliders = [
+      Container(),
+      Container(),
+      Container(),
+    ]
         .map((item) => Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white70,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: const [
                       BoxShadow(
@@ -148,6 +236,71 @@ class _LiquidacionesWidgetState extends State<_LiquidacionesWidget> {
                         color: Colors.grey,
                       )
                     ]),
+                child: Column(children: [
+                  //ESTADO DE LA LIQUIDACION
+                  ListTile(
+                    leading: const Icon(
+                      Icons.receipt_outlined,
+                      size: 20,
+                    ),
+                    title: Text(
+                      'Abierta',
+                      style: GoogleFonts.roboto(
+                          fontSize: size.height * 0.03,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      'Diciembre',
+                      style: GoogleFonts.roboto(
+                          fontSize: size.height * 0.015,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    trailing: Text(
+                      '154,30€',
+                      style: GoogleFonts.roboto(
+                          fontSize: size.height * 0.02,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  //INICIO DE LA LIQUIDACION
+                  ListTile(
+                    leading: const Icon(
+                      Icons.calendar_month_outlined,
+                      size: 20,
+                    ),
+                    title: Text(
+                      '01/12/2023',
+                      style: GoogleFonts.roboto(
+                        fontSize: size.height * 0.012,
+                      ),
+                    ),
+                    trailing: Text(
+                      'Inicio',
+                      style: GoogleFonts.roboto(
+                          fontSize: size.height * 0.02,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  //INICIO DE LA LIQUIDACION
+                  ListTile(
+                    leading: const Icon(
+                      Icons.calendar_month_outlined,
+                      size: 20,
+                    ),
+                    title: Text(
+                      '23/12/2023',
+                      style: GoogleFonts.roboto(
+                        fontSize: size.height * 0.012,
+                      ),
+                    ),
+                    trailing: Text(
+                      'Finalizo',
+                      style: GoogleFonts.roboto(
+                          fontSize: size.height * 0.02,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ]),
               ),
             ))
         .toList();
@@ -178,8 +331,8 @@ class _LiquidacionesWidgetState extends State<_LiquidacionesWidget> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _current == index
-                    ? Color.fromRGBO(0, 0, 0, 0.9)
-                    : Color.fromRGBO(0, 0, 0, 0.4),
+                    ? const Color.fromRGBO(0, 0, 0, 0.9)
+                    : const Color.fromRGBO(0, 0, 0, 0.4),
               ),
             );
           }).toList(),
@@ -218,7 +371,12 @@ class _UltimoGastoWidgetState extends State<_UltimoGastoWidget> {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
-                    'Ultimo gasto: ${cList[0].category} ${cList[0].day}/${cList[0].month}/${cList[0].year} ${getAmountFormat(cList[0].amount)}'),
+                  'Ultimo gasto: ${cList[0].category} ${cList[0].day}/${cList[0].month}/${cList[0].year} ${getAmountFormat(cList[0].amount)}',
+                  style: GoogleFonts.roboto(
+                    fontSize: size.height * 0.016,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
               onLongPress: () => showDialog(
                 context: context,
@@ -292,7 +450,7 @@ class _GastoBorradorWidget extends StatelessWidget {
     return Container(
       height: 80,
       decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 255, 198, 66),
+          color: Color.fromARGB(255, 254, 186, 96),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
@@ -317,7 +475,7 @@ class _KlikCardWidget extends StatelessWidget {
     return Container(
       height: 80,
       decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 255, 198, 66),
+          color: Color.fromARGB(255, 254, 186, 96),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),

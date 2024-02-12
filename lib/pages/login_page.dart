@@ -560,11 +560,14 @@ class LoginFormState extends State<LoginForm> {
 
 //LLAMO A MI INITSTATE PARA QUE CUANDO CORRA LA APP AUTOMATICAMENTE EJECUTE LA FUNCION DE AUTHENTICATION MEDIANTE TOUCH O FACE
 
-  @override
+ @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _passwordVisible = false;
+    //INICIALIZACION DEL PAQUETE
+    auth = LocalAuthentication();
+    auth.isDeviceSupported().then((bool isSupported) => setState(() {}));
   }
 
   @override

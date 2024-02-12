@@ -1,10 +1,15 @@
+import 'dart:io';
+
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:klikticket/models/combined_model.dart';
+import 'package:klikticket/pages/add_expenses.dart';
 import 'package:klikticket/providers/ui_provider.dart';
 import 'package:klikticket/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:klikticket/utils/page_animation_routes.dart';
 import 'package:provider/provider.dart';
 
 import 'package:klikticket/utils/utils.dart';
@@ -310,7 +315,11 @@ class _FloatButtonUIState extends State<FloatButtonUI> {
                           //CONTENIDO DEL BOTON FLOTANTE
                           FloatButtonWidget(
                             //APERTURA DE LA CAMARA
-                            onTap: () {},
+                            onTap: () => Navigator.push(
+                                context,
+                                PageAnimationRoutes(
+                                  widget: const AddExpenses(),
+                                )),
                             title: 'Ticket',
                             subtitle: 'Registrar solo un ticket a la vez',
                             icon: Icons.camera_alt_outlined,
@@ -326,10 +335,11 @@ class _FloatButtonUIState extends State<FloatButtonUI> {
                           ),
                           FloatButtonWidget(
                             //APERTURA DE LA GALERIA
-                            onTap: () {
-                              print('HACER APERTURA DEL MULTICAMARA EN TRUE');
-                            },
-
+                            onTap: () => Navigator.push(
+                                context,
+                                PageAnimationRoutes(
+                                  widget: const CamaraPruebaMulti(),
+                                )),
                             title: 'Multitiket',
                             subtitle: 'Registrar multiples tickets a la vez',
                             icon: Icons.copy,
@@ -478,5 +488,136 @@ class BotonFlotanteWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CamaraPruebaMulti extends StatefulWidget {
+  const CamaraPruebaMulti({Key? key}) : super(key: key);
+
+  @override
+  State<CamaraPruebaMulti> createState() => _CamaraPruebaMultiState();
+}
+
+class _CamaraPruebaMultiState extends State<CamaraPruebaMulti> {
+  List<String> _pictures = [];
+  @override
+  Widget build(BuildContext context) {
+    //Esta linea de codigo me permite manejar la proporciones, es decir, el espacio que ocupara cada Widget, por ejemplo el 30% de mi pantalla "X"
+    final size = MediaQuery.of(context).size;
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 24, 24, 241),
+          title: Text('Imagenes: ${_pictures.length}'),
+          centerTitle: true,
+        ),
+        body: ListView.separated(
+          itemCount: _pictures.length,
+          separatorBuilder: (BuildContext context, int index) => const Divider(
+            color: Colors.black,
+          ),
+          itemBuilder: (context, i) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              child: GestureDetector(
+                onLongPress: () => showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    contentPadding: EdgeInsets.zero,
+                    content:
+                        //IMAGEN RENDERIZADA DE FONDO
+                        SizedBox(
+                      height: size.height * 0.7,
+                      child: SizedBox(
+                        height: size.height * 0.6,
+                        child: InteractiveViewer(
+                          child: Image.file(
+                            File(_pictures[i]),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () {},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CircleAvatar(
+                      child: Icon(
+                        Icons.receipt,
+                        size: 15,
+                      ),
+                    ),
+                    const Text(
+                      'Gasto',
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(80)),
+                        ),
+                        const Text(
+                          'Gasto en borrador',
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: GestureDetector(
+          onTap: () => onPressed(true),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 55, 73, 87),
+                  borderRadius: BorderRadius.circular(20)),
+              width: 150,
+              height: 50,
+              alignment: Alignment.center,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    'Multiticket',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      
+    );
+  }
+
+  void onPressed(bool action) async {
+    List<String> imagenPath;
+    try {
+      imagenPath = await CunningDocumentScanner.getPictures(action) ?? [];
+      if (!mounted) return;
+      setState(() {
+        _pictures = imagenPath;
+        print(imagenPath.length);
+        print(imagenPath);
+      });
+    } catch (exception) {
+      print(exception);
+    }
   }
 }

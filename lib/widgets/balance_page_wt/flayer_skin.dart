@@ -27,7 +27,6 @@ class FlayerSkin extends StatelessWidget {
           Container(
             width: size.width,
             padding: const EdgeInsets.only(bottom: 15),
-            
             child: myWidget,
           )
         ],

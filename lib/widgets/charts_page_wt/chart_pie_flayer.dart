@@ -22,41 +22,39 @@ class _ChartPieState extends State<ChartPieFlayer> {
     var gList = context.watch<ExpensesProvider>().grouptemsList;
     double totalOthers = 0;
 
-    if(_index >= gList.length){ 
+    if (_index >= gList.length) {
       _index = 0;
     }
 
-    if(gList.length >= 6 ){
-      totalOthers = gList.sublist(5).map((e) => 
-        e.amount).fold(0.0, (a, b) => a + b);
-      gList = gList.sublist(0,5).toList();
+    if (gList.length >= 6) {
+      totalOthers =
+          gList.sublist(5).map((e) => e.amount).fold(0.0, (a, b) => a + b);
+      gList = gList.sublist(0, 5).toList();
       gList.add(CombinedModel(
-        category: 'Otros',
-        amount: totalOthers,
-        icon: 'otros',
-        color: '#20634b'
-      ));
+          category: 'Otros',
+          amount: totalOthers,
+          icon: 'otros',
+          color: '#20634b'));
     }
 
     var item = gList[_index];
 
-    List<charts.Series<CombinedModel, String>> _series(int index){
+    List<charts.Series<CombinedModel, String>> _series(int index) {
       return [
         charts.Series<CombinedModel, String>(
-          id: 'PieChart',
-          domainFn: (v, i) => v.category,
-          measureFn: (v, i) => v.amount,
-          keyFn: (v, i) => v.icon,
-          colorFn: (v, i) {
-            var onTap = i == index;
-            if(onTap == false){
-              return charts.ColorUtil.fromDartColor(v.color.toColor());
-            } else {
-              return charts.ColorUtil.fromDartColor(v.color.toColor()).darker;
-            }
-          },
-          data: gList
-        )
+            id: 'PieChart',
+            domainFn: (v, i) => v.category,
+            measureFn: (v, i) => v.amount,
+            keyFn: (v, i) => v.icon,
+            colorFn: (v, i) {
+              var onTap = i == index;
+              if (onTap == false) {
+                return charts.ColorUtil.fromDartColor(v.color.toColor());
+              } else {
+                return charts.ColorUtil.fromDartColor(v.color.toColor()).darker;
+              }
+            },
+            data: gList)
       ];
     }
 
@@ -69,18 +67,17 @@ class _ChartPieState extends State<ChartPieFlayer> {
           animationDuration: const Duration(milliseconds: 800),
           defaultInteractions: true,
           defaultRenderer: charts.ArcRendererConfig(
-            arcWidth: 45,
+            arcWidth: 25,
             strokeWidthPx: 0.0,
           ),
           selectionModels: [
             charts.SelectionModelConfig(
               type: charts.SelectionModelType.info,
-              changedListener: (charts.SelectionModel model){
-                if(model.hasDatumSelection){
+              changedListener: (charts.SelectionModel model) {
+                if (model.hasDatumSelection) {
                   setState(() {
                     _animate = false;
                     _index = model.selectedDatum[0].index!;
-
                   });
                 }
               },
@@ -88,7 +85,6 @@ class _ChartPieState extends State<ChartPieFlayer> {
           ],
         ),
         SizedBox(
-          width: 55.0,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -96,21 +92,13 @@ class _ChartPieState extends State<ChartPieFlayer> {
                 fit: BoxFit.fitWidth,
                 child: Icon(
                   item.icon.toIcon(),
-                  color:  item.color.toColor(),
+                  color: item.color.toColor(),
                 ),
               ),
+              // FittedBox(fit: BoxFit.fitWidth, child: Text(item.category)),
               FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text(
-                  item.category
-                )
-              ),
-              FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text(
-                  getAmountFormat(item.amount)
-                )
-              ),
+                  fit: BoxFit.fitWidth,
+                  child: Text(getAmountFormat(item.amount))),
             ],
           ),
         )

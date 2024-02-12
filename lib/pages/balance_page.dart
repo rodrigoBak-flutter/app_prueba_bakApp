@@ -1,5 +1,6 @@
 import 'package:klikticket/widgets/balance_page_wt/custom_fab.dart';
 import 'package:klikticket/widgets/balance_page_wt/front_sheet.dart';
+import 'package:klikticket/widgets/mas/bloque_1/notificaciones/notificaciones.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:klikticket/utils/page_animation_routes.dart';
 import 'package:klikticket/pages/add_expenses.dart';
@@ -88,7 +89,7 @@ class _BalancePageState extends State<BalancePage> {
                   child: const Padding(
                     padding: EdgeInsets.only(right: 10),
                     child: Text(
-                      'Carlos Garmendia',
+                      'Nombre Apellido',
                       style: TextStyle(fontSize: 12),
                     ),
                   )),
@@ -96,7 +97,10 @@ class _BalancePageState extends State<BalancePage> {
             ),
             actions: [
               IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.notifications))
+                  onPressed: () => Navigator.pushAndRemoveUntil(
+                  context,
+                  PageAnimationRoutes(widget: const NotificacionesScreen()),
+                  ModalRoute.withName('')), icon: const Icon(Icons.notifications))
             ],
           ),
           SliverList(

@@ -1,9 +1,10 @@
 import 'package:klikticket/pages/aprobador.dart';
 import 'package:klikticket/pages/expenses_details.dart';
 import 'package:klikticket/pages/liquidaciones.dart';
-import 'package:klikticket/pages/setting_page.dart';
+
 import 'package:klikticket/providers/expenses_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:klikticket/widgets/mas/setting_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:klikticket/providers/ui_provider.dart';
@@ -48,7 +49,8 @@ class _HomePage extends StatelessWidget {
       case 3:
         return const AprobadorPage();
       case 4:
-        return const SettingPage();
+        return const SettingScreen();
+      // return const SettingPage();
 
       default:
         return const BalancePage();

@@ -62,8 +62,7 @@ class _ChartPieState extends State<ChartPie> {
               var onTap = i == index;
               return charts.TextStyleSpec(
                   fontSize: (onTap) ? 14 : 8,
-                  color: charts.ColorUtil.fromDartColor(
-                      Theme.of(context).dividerColor));
+                  color: charts.ColorUtil.fromDartColor(Colors.black));
             },
             data: gList)
       ];
@@ -78,7 +77,7 @@ class _ChartPieState extends State<ChartPie> {
           animationDuration: const Duration(milliseconds: 800),
           defaultInteractions: true,
           defaultRenderer: charts.ArcRendererConfig(
-              arcWidth: 45,
+              arcWidth: 35,
               strokeWidthPx: 0.0,
               arcRendererDecorators: [
                 charts.ArcLabelDecorator(
