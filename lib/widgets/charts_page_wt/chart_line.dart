@@ -100,7 +100,7 @@ class ChartLine extends StatelessWidget {
             labelJustification: charts.TickLabelJustification.outside
           ),
           tickFormatterSpec: charts.BasicNumericTickFormatterSpec
-            .fromNumberFormat(NumberFormat.simpleCurrency(
+            .fromNumberFormat(NumberFormat.simpleCurrency(locale: 'es',
               decimalDigits: 0
             )),
           tickProviderSpec: const charts.BasicNumericTickProviderSpec(
